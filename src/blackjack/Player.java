@@ -7,8 +7,24 @@ package blackjack;
 
 /**
  *
- * @author gubotdev
+ * @author borela001
  */
 public class Player {
+    private Hand myHand = new Hand();
+    private String name;
+
+    public Player(String name){
+        this.name = name;
+    }
+
+    public Player(int playerNum){
+        name = "Player" + playerNum;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+
     
 }

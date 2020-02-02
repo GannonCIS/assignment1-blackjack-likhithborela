@@ -10,8 +10,9 @@ package blackjack;
  * @author gubotdev
  */
 public class Card {
+    //identifiers for each cards value and type
     public final String RANK, SUIT;
-
+    //constructs the card object with a suit and a numerical value or face card value
     public Card(String RANK, String SUIT){
         this.RANK = RANK;
         this.SUIT = SUIT;

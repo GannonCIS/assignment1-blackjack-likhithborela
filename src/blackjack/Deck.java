@@ -19,6 +19,7 @@ public class Deck {
     //the constructor
     public Deck(){
         initDeck();
+        shuffle();
     }
     //initializes a deck by creating deck objects and assigning them into the myCards array
     private void initDeck(){
@@ -30,9 +31,15 @@ public class Deck {
     }
     //shuffles the myCards arrays values through a math.random loop
     private void shuffle(){
+        for(int i = 0; i < myCards.length; i++){
+            Card temp = myCards[i];
+            int rand = (int)(Math.random()*52);
 
+            myCards[i] = myCards[rand];
+            myCards[rand] = temp;
+        }
     }
-    
+
     //test method
     public void printDeck(){
         for(int i = 0; i < myCards.length;i++){

@@ -34,12 +34,10 @@ public class Deck {
         for(int i = 0; i < myCards.length; i++){
             Card temp = myCards[i];
             int rand = (int)(Math.random()*52);
-
             myCards[i] = myCards[rand];
             myCards[rand] = temp;
         }
     }
-
     //test method
     public void printDeck(){
         for(int i = 0; i < myCards.length;i++){
@@ -48,7 +46,13 @@ public class Deck {
     }
     //deals card to a player from the array
     public Card dealCard(){
-        return null;
+        Card next = myCards[nextCard];
+        nextCard++;
+        if(nextCard > 51){
+            shuffle();
+            nextCard = 0;
+        }
+        return next;
     }
 
 }

@@ -17,6 +17,11 @@ public class BlackJack {
     public static void main(String[] args) {
  
       Deck myDeck = new Deck();
+      Hand myHand = new Hand();
 
+      for(int i = 0; i < 6; i++){
+        myHand.addCard(myDeck.dealCard());
+        System.out.println("numofcards: " + myHand.getNumOfCards() + " score: " + myHand.getScore());
+      }
     }
 }

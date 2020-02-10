@@ -11,6 +11,7 @@ package blackjack;
  */
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.*;
 
 public class Dealer {
     // making a dealerHand and a deck instance from which to actually get cards
@@ -71,36 +72,41 @@ public class Dealer {
         return dealerHand.getScore();
     }
     //determines if dealer is bust so everyone is a winner or if the dealer won or if certain people beat the dealer
-    private String declareWinner(){
-        Player winner = new Player("Dummy");
-        for(int i = 0; i < myPlayers.length; i++){
-            if(myPlayers[i].getMyHand().getScore() > winner.getMyHand().getScore() && myPlayers[i].getMyHand().getScore() <= 21){
-                winner = myPlayers[i];
-            } else {
-                if(myPlayers[i].getMyHand().getScore() == winner.getMyHand().getScore()){
-                    if(myPlayers[i].getMyHand().getNumOfCards() <= winner.getMyHand().getNumOfCards()){
-                        winner = myPlayers[i];
-                    }
-                }
-            }            
-        }
+    private void declareWinner(){
         Player dealer = new Player("Dealer");
-        if(playOutDealerHand() > winner.getMyHand().getScore() && playOutDealerHand() <= 21){
-                winner = dealer;
-            } else {
-                if(playOutDealerHand() == winner.getMyHand().getScore()){
-                    if(dealerHand.getNumOfCards() <= winner.getMyHand().getNumOfCards()){
-                        winner = dealer;
-                    }
+        ArrayList<Player> winners = new ArrayList<Player>();
+        if(playOutDealerHand() > 21){
+            for(Player currPlayer: myPlayers){
+                if(currPlayer.getMyHand().getScore() <= 21){
+                    winners.add(currPlayer);
+                }
+            } 
+        } else {
+            for(Player currPlayer: myPlayers){
+                if(currPlayer.getMyHand().getScore() > playOutDealerHand() && currPlayer.getMyHand().getScore() <= 21){
+                    winners.add(currPlayer);
+                } else if(currPlayer.getMyHand().getScore() >= playOutDealerHand()){
+                
+                } else if (currPlayer.getMyHand().getNumOfCards() > dealerHand.getNumOfCards() && 
+                            currPlayer.getMyHand().getNumOfCards() == 5 && currPlayer.getMyHand().getScore() <= 21
+                            && playOutDealerHand() <= 21){
+                    winners.add(currPlayer);
                 }
             }
-        return winner.getName();
+            if(winners.size() == 0){
+                winners.add(dealer);
+            }
+            for(Player currPlayer: winners){
+                System.out.println(currPlayer.getName());
+            }
+        }
     }
+
     //calls all the methods above to play the game, provides a simpler interface to play the game in the clinet class through abstraction
     public void playGame(){
         dealOpeningHand();
         takePlayerTurns();
-        System.out.println(declareWinner());
+        declareWinner();
         System.out.println("Dealer Score: " + playOutDealerHand());
     }
     

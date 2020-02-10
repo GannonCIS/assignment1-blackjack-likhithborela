@@ -71,11 +71,12 @@ public class Dealer {
         
         return dealerHand.getScore();
     }
-    //determines if dealer is bust so everyone is a winner or if the dealer won or if certain people beat the dealer
+        //determines if dealer is bust so everyone is a winner or if the dealer won or if certain people beat the dealer
     private void declareWinner(){
         Player dealer = new Player("Dealer");
         ArrayList<Player> winners = new ArrayList<Player>();
-        if(playOutDealerHand() > 21){
+        int dealerScore = playOutDealerHand();
+        if(dealerScore > 21){
             for(Player currPlayer: myPlayers){
                 if(currPlayer.getMyHand().getScore() <= 21){
                     winners.add(currPlayer);
@@ -83,32 +84,28 @@ public class Dealer {
             } 
         } else {
             for(Player currPlayer: myPlayers){
-                if(currPlayer.getMyHand().getScore() > playOutDealerHand() && currPlayer.getMyHand().getScore() <= 21){
+                if(currPlayer.getMyHand().getScore() > dealerScore && currPlayer.getMyHand().getScore() <= 21){
                     winners.add(currPlayer);
-                } else if(currPlayer.getMyHand().getScore() >= playOutDealerHand()){
+                } else if(currPlayer.getMyHand().getScore() >= dealerScore){
                 
-                } else if (currPlayer.getMyHand().getNumOfCards() > dealerHand.getNumOfCards() && 
-                            currPlayer.getMyHand().getNumOfCards() == 5 && currPlayer.getMyHand().getScore() <= 21
-                            && playOutDealerHand() <= 21){
+                } else if (currPlayer.getMyHand().getNumOfCards() == 5 && currPlayer.getMyHand().getScore() <= 21 && dealerScore <= 21){
                     winners.add(currPlayer);
                 }
             }
-            if(winners.size() == 0){
-                winners.add(dealer);
-            }
-            for(Player currPlayer: winners){
-                System.out.println(currPlayer.getName());
-            }
         }
+        if(winners.size() == 0){
+            winners.add(dealer);
+        }
+        System.out.println("WINNERS:");
+        for(Player currPlayer: winners){
+            System.out.println(currPlayer.getName());
+        }    
     }
-
     //calls all the methods above to play the game, provides a simpler interface to play the game in the clinet class through abstraction
     public void playGame(){
         dealOpeningHand();
         takePlayerTurns();
         declareWinner();
         System.out.println("Dealer Score: " + playOutDealerHand());
-    }
-    
-    
+    }    
 }

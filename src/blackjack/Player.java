@@ -19,16 +19,14 @@ public class Player {
     }
     //overloaded constructor if player is name less
     public Player(int playerNum){
-        name = "Player" + playerNum;
+        name = "Player " + playerNum;
     }
     //accessor method to get the players name
     public String getName(){
         return name;
     }
+    
     public Hand getMyHand(){
         return myHand;
-    }
-
-
-    
+    }    
 }

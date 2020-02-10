@@ -18,9 +18,6 @@ public class Dealer {
     private Deck gameDeck = new Deck();
     private Player[] myPlayers;
     private Scanner reader = new Scanner(System.in);
-    
-    //a boolean to determine if the dealer is bust as that can determine winners
-    private boolean isDealerBust;
     //constructor of dealer
     public Dealer(int numOfPlayers){
         initMyPlayers(numOfPlayers);
@@ -52,42 +49,59 @@ public class Dealer {
         for(Player currPlayer: myPlayers){
             while(currPlayer.getMyHand().getScore() < 21 && currPlayer.getMyHand().getNumOfCards() < 5){
                 System.out.println(currPlayer.getName() + "'s Hand");
+                currPlayer.getMyHand().printHand();
                 System.out.println("Wanna Hit? Enter Y for yes and N for no");
-                Char takeHit = reader.next().charAt(0);
-                if(opt == 'Y'){
-                    currPlayer.getMyHand().addCard(myDeck.dealCard);
-                }   
+                char takeHit = reader.next().charAt(0);
+                if(takeHit == 'Y'){
+                    currPlayer.getMyHand().addCard(gameDeck.dealCard());
+                } else if(takeHit == 'N') {
+                    break;
+                }
             }
-            currPlayer.getMyHand().printHand();
+            System.out.println(currPlayer.getMyHand().getScore());
+            System.out.println("");
         }
     }
     //checks if game is over if dealer bust
-    private boolean playOutDealerHand(){
-        while(dealerHand.getScore() < 21){
-            dealerHand.addCard(myDeck.dealCard());
+    private int playOutDealerHand(){
+        while(dealerHand.getScore() < 17){
+            dealerHand.addCard(gameDeck.dealCard());
         }
-        isDealerBust = true;
-        return isDealerBust;
+        
+        return dealerHand.getScore();
     }
     //determines if dealer is bust so everyone is a winner or if the dealer won or if certain people beat the dealer
     private String declareWinner(){
-        Player winner = myPlayers[0];
-        for(int i = 1; i < myPlayers.length; i++){
-            winner = (myPlayers[i].getMyHand().getScore() > winner.getMyHand().getScore()) ? myPlayers[i] : 
-            (myPlayers[i].getMyHand().getScore() == winner.getMyHand().getScore()) ? 
-            (myPlayers[i].getMyHand().getNumOfCards() > winner.getMyHand().getNumOfCards()) ? myPlayers[i] : winner : myPlayers[i];
+        Player winner = new Player("Dummy");
+        for(int i = 0; i < myPlayers.length; i++){
+            if(myPlayers[i].getMyHand().getScore() > winner.getMyHand().getScore() && myPlayers[i].getMyHand().getScore() <= 21){
+                winner = myPlayers[i];
+            } else {
+                if(myPlayers[i].getMyHand().getScore() == winner.getMyHand().getScore()){
+                    if(myPlayers[i].getMyHand().getNumOfCards() <= winner.getMyHand().getNumOfCards()){
+                        winner = myPlayers[i];
+                    }
+                }
+            }            
         }
-        dealer = new Player("Dealer");
-        winner = (playOutDealerHand()) ? winner : dealer;
-
-        return winner.getName();//bruh u dumb if u dont remove this
+        Player dealer = new Player("Dealer");
+        if(playOutDealerHand() > winner.getMyHand().getScore() && playOutDealerHand() <= 21){
+                winner = dealer;
+            } else {
+                if(playOutDealerHand() == winner.getMyHand().getScore()){
+                    if(dealerHand.getNumOfCards() <= winner.getMyHand().getNumOfCards()){
+                        winner = dealer;
+                    }
+                }
+            }
+        return winner.getName();
     }
     //calls all the methods above to play the game, provides a simpler interface to play the game in the clinet class through abstraction
     public void playGame(){
         dealOpeningHand();
         takePlayerTurns();
-        playOutDealerHand();
-        declareWinner();
+        System.out.println(declareWinner());
+        System.out.println("Dealer Score: " + playOutDealerHand());
     }
     
     
